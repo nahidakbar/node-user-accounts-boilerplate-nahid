@@ -5,7 +5,7 @@ module.exports.type = 'string';
 module.exports.mask = true;
 module.exports.assign = async function(user, field, value, fieldMeta, loginUser, config)
 {
-  if (loginUser.id !== user.id || typeof value === 'boolean' || value === '')
+  if (typeof value === 'boolean' || value === '')
   {
     delete user[field];
     return
