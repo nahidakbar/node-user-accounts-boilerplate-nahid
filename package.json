@@ -1,6 +1,6 @@
 {
   "name": "node-user-accounts-boilerplate",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Off the shelf user accounts management",
   "main": "setup.js",
   "directories": {
@@ -14,7 +14,7 @@
     "docs": "jbn docs",
     "form": "jbn form"
   },
-  "author": "Nahid Akbar",
+  "author": "Nahid Akbar <mail@nahidakbar.net> (http://nahidakbar.net/)",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.17.2",
