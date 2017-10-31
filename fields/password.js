@@ -26,7 +26,7 @@ module.exports.assign = async function(user, field, value, fieldMeta, loginUser,
     throw new Error('A crypt is not configured');
   }
 
-  const hash = config.crypt.hash(value);
+  const hash = await config.crypt.hash(value);
 
   user[field] = hash;
 };
