@@ -173,15 +173,16 @@ class Auth
    */
   createUserFromProfile(profile)
   {
+    const credential = {
+      type: this.method,
+      value: profile.id
+    };
     let user = {
       // unique id
       // can't use id from profile as these might conflict across login providers
       id: generateId(),
       // login credentials
-      credentials: [{
-        type: this.method,
-        value: profile.id
-      }],
+      credentials: [credential],
       // new user roles
       roles: this.defaultRoles,
       // profile bs
@@ -207,6 +208,13 @@ class Auth
         }
       }
     }
+    
+    if (profile._json && profile._json.publicProfileUrl)
+    {
+      credential.publicUrl = profile._json.publicProfileUrl;
+    }
+    
+    // console.log(JSON.stringify(profile, null, 2))
 
     return user;
   }
