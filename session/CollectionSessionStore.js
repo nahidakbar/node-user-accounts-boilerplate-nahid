@@ -55,10 +55,17 @@ class CollectionSessionStore extends Store
   /**
    * @override
    */
-  get(sessionId, callback)
+  async get(sessionId, callback)
   {
-    this.cleanup();
-    defer(callback, null, this.collection.lookup[sessionId]);
+    let record = undefined;
+    try
+    {
+      callback(null, this.collection.readRecord({id: sessionId}))
+    }
+    catch(e)
+    {
+      console.log(e)
+    }
   }
 
   /**

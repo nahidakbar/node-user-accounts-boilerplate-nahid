@@ -13,6 +13,10 @@ class Collection
   {
     this.lookup[record.id] = record;
   }
+  async readRecord(record)
+  {
+    return this.lookup[record.id];
+  }
   async deleteRecord(record)
   {
     delete this.lookup[record.id];
