@@ -57,7 +57,6 @@ class CollectionSessionStore extends Store
    */
   async get(sessionId, callback)
   {
-    let record = undefined;
     try
     {
       callback(null, await this.collection.readRecord({id: sessionId}))
