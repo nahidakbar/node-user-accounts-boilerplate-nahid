@@ -60,11 +60,11 @@ class CollectionSessionStore extends Store
     let record = undefined;
     try
     {
-      callback(null, this.collection.readRecord({id: sessionId}))
+      callback(null, await this.collection.readRecord({id: sessionId}))
     }
     catch(e)
     {
-      console.log(e)
+      callback(null, undefined)
     }
   }
 
