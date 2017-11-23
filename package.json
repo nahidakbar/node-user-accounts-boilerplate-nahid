@@ -1,6 +1,6 @@
 {
   "name": "node-user-accounts-boilerplate",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "Off the shelf user accounts management",
   "main": "setup.js",
   "directories": {

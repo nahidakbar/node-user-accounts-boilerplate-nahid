@@ -208,12 +208,16 @@ class Auth
         }
       }
     }
-    
+
     if (profile._json && profile._json.publicProfileUrl)
     {
       credential.publicUrl = profile._json.publicProfileUrl;
     }
-    
+    else if (profile._json && profile._json.url)
+    {
+      credential.publicUrl = profile._json.url;
+    }
+
     // console.log(JSON.stringify(profile, null, 2))
 
     return user;
