@@ -7,7 +7,7 @@ const Strategy = require('passport-facebook')
 
 /**
  * OAuth login using facebook login provider
- * 
+ *
  * Requires ```passport-facebook``` package.
  */
 class FacebookAuth extends Auth
@@ -53,6 +53,12 @@ class FacebookAuth extends Auth
     app.all(`${prefix}/callback.json`, passport.authenticate('facebook', this.authenticateOptions), this.loggedIn(true));
   }
 
+  createUserFromProfile(profile)
+  {
+    profile._json = profile._json || {};
+    profile._json.publicProfileUrl = profile._json.publicProfileUrl || `https://www.facebook.com/${profile.id}`;
+    return super.createUserFromProfile(profile);
+  }
 }
 
 module.exports = FacebookAuth;
