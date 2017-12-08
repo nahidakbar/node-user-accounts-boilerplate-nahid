@@ -239,6 +239,10 @@ function summariseUserRecord(user, fields, addiionalToInclude={})
       {
         output[field] = true;
       }
+      else if (meta.view)
+      {
+        output[field] = meta.view(user[field]);
+      }
       else
       {
         output[field] = user[field];
