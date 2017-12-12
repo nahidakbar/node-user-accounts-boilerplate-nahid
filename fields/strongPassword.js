@@ -130,7 +130,7 @@ module.exports.generate = function generate(length = 10)
     '0123456789',
     'abcdefghijklmnopqrstuvwxyz',
     'ABCDEFGJIJKLMNOPQRSTUVWXYZ',
-    '!@$%^*_'
+    '!@$^*_'
   ];
 
   let availableOrder = [0, 1, 2, 3];
