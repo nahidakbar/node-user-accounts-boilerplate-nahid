@@ -59,9 +59,11 @@ class CollectionSessionStore extends Store
   {
     try
     {
-      callback(null, await this.collection.readRecord({id: sessionId}))
+      callback(null, await this.collection.readRecord({
+        id: sessionId
+      }))
     }
-    catch(e)
+    catch (e)
     {
       callback(null, undefined)
     }

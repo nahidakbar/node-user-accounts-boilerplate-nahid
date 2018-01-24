@@ -4,7 +4,7 @@ const password = require('./password');
 
 module.exports = Object.assign({}, password);
 
-module.exports.assign = async function(user, field, value, fieldMeta, loginUser, config)
+module.exports.assign = async function (user, field, value, fieldMeta, loginUser, config)
 {
   if (typeof value === 'string' && value !== '')
   {
@@ -27,9 +27,9 @@ function findMaxSequenceSize(password)
 
   password = password.toLowerCase();
 
-  sequences.forEach(function(sequence)
+  sequences.forEach(function (sequence)
   {
-    var converted = Array.prototype.map.call(password, function(c)
+    var converted = Array.prototype.map.call(password, function (c)
     {
       return sequence.indexOf(c);
     });
@@ -43,11 +43,11 @@ function findMaxSequenceSize(password)
       }
       else
       {
-         if (sameSize > maxSequence)
-         {
-           maxSequence = sameSize;
-         }
-         sameSize = 1;
+        if (sameSize > maxSequence)
+        {
+          maxSequence = sameSize;
+        }
+        sameSize = 1;
       }
       if (converted[x] === converted[x - 1] + 1 && converted[x - 1] !== -1)
       {
@@ -55,11 +55,11 @@ function findMaxSequenceSize(password)
       }
       else
       {
-         if (progressiveSize > maxSequence)
-         {
-           maxSequence = progressiveSize;
-         }
-         progressiveSize = 1;
+        if (progressiveSize > maxSequence)
+        {
+          maxSequence = progressiveSize;
+        }
+        progressiveSize = 1;
       }
     }
     if (sameSize > maxSequence)
@@ -74,7 +74,7 @@ function findMaxSequenceSize(password)
   return maxSequence;
 }
 
-module.exports.checkStrongPassword = function(password)
+module.exports.checkStrongPassword = function (password)
 {
   if (password.length > 12)
   {

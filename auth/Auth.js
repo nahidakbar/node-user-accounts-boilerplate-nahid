@@ -177,10 +177,11 @@ class Auth
       type: this.method,
       value: profile.id
     };
+
     let user = {
       // unique id
       // can't use id from profile as these might conflict across login providers
-      id: generateId(),
+      id: this.generateId(),
       // login credentials
       credentials: [credential],
       // new user roles
@@ -221,6 +222,17 @@ class Auth
     // console.log(JSON.stringify(profile, null, 2))
 
     return user;
+  }
+
+  generateId()
+  {
+    console.log(this)
+    let id = undefined;
+    while (!id || this.users.lookup[id])
+    {
+      id = generateId();
+    }
+    return id;
   }
 
   /**

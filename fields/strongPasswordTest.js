@@ -1,7 +1,11 @@
 "use strict";
 
 const assert = require('assert');
-const { generate, checkStrongPassword } = require('./strongPassword');
+const
+{
+  generate,
+  checkStrongPassword
+} = require('./strongPassword');
 
 describe(`generate password`, function ()
 {

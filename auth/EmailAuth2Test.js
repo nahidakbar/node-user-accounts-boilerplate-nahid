@@ -4,9 +4,11 @@ const assert = require('assert');
 const describeConfig = require('../setupTester');
 const EmailAuth = require('./EmailAuth');
 const PBKDF2 = require('../crypt/PBKDF2');
-process.on('unhandledRejection', (reason, p) => {
+process.on('unhandledRejection', (reason, p) =>
+{
   console.log(reason.stack, p.stack);
 });
+
 function config(base = {})
 {
   return async function ()

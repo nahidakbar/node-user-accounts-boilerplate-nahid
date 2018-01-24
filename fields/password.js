@@ -3,7 +3,7 @@
 module.exports.order = 50;
 module.exports.type = 'string';
 module.exports.mask = true;
-module.exports.assign = async function(user, field, value, fieldMeta, loginUser, config)
+module.exports.assign = async function (user, field, value, fieldMeta, loginUser, config)
 {
   if (typeof value === 'boolean' || value === '')
   {

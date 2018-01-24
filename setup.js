@@ -106,7 +106,7 @@ function setupAuthAPI(app, config)
   });
 
   // self update
-  app.put(`${prefix}/current.json`, access.LOGGEDIN, json, async (req, res) =>
+  app.put(`${prefix}/current.json`, access.LOGGEDIN, json, async(req, res) =>
   {
     let user = req.user;
     if (req.body)
@@ -147,7 +147,7 @@ function setupAccountsAPI(app, config)
     res.resolve(collection.searchRecords(query), false, audit.ACCOUNT_SEARCH, JSON.stringify(query));
   });
 
-  app.post(`${prefix}/:user.json`, USER_DATA_ACCESS, json, async (req, res) =>
+  app.post(`${prefix}/:user.json`, USER_DATA_ACCESS, json, async(req, res) =>
   {
     try
     {
@@ -160,7 +160,10 @@ function setupAccountsAPI(app, config)
       let profile = await auth.createProfileFromCredential(req.body.value, req.body);
       user = auth.createUserFromProfile(profile);
       user = await config.users.createRecord(user);
-      res.success({success: 'Created!', user}, audit.ACCOUNT_CREATE + audit.SUCCESS);
+      res.success({
+        success: 'Created!',
+        user
+      }, audit.ACCOUNT_CREATE + audit.SUCCESS);
     }
     catch (e)
     {
@@ -178,7 +181,9 @@ function setupAccountsAPI(app, config)
     collection.readRecord(query)
       .then((user) =>
       {
-        res.json(summariseUserRecord(user, config.fields, {credentials: true}));
+        res.json(summariseUserRecord(user, config.fields, {
+          credentials: true
+        }));
         res.audit(audit.ACCOUNT_READ + audit.SUCCESS, JSON.stringify(query));
       }, res.reject(audit.ACCOUNT_READ + audit.FAILURE), JSON.stringify(query));
   });
@@ -190,7 +195,7 @@ function setupAccountsAPI(app, config)
 
     query[collection.primaryKey] = req.params.user;
     collection.readRecord(query)
-      .then(async (record) =>
+      .then(async(record) =>
       {
         let params = Object.keys(req.body);
 
@@ -227,7 +232,7 @@ function setupAccountsAPI(app, config)
 
 }
 
-function summariseUserRecord(user, fields, addiionalToInclude={})
+function summariseUserRecord(user, fields, addiionalToInclude = {})
 {
   const output = {};
   for (let field in user)
@@ -283,18 +288,19 @@ async function updateUserRecord(user, update, loginUser, config)
 
 function summariseFields(inputFields)
 {
-  let fields = Object.keys(inputFields).map(field =>
-  {
-    return {
-      name: field,
-      order: inputFields[field].order || 10,
-      type: inputFields[field].type || 'string',
-      self: inputFields[field].self !== undefined? inputFields[field].self : true,
-      admin: inputFields[field].admin !== undefined? inputFields[field].admin : true,
-      enabled: inputFields[field].enabled !== undefined? inputFields[field].enabled : true,
-    };
-  });
-  fields.sort(function(a, b)
+  let fields = Object.keys(inputFields)
+    .map(field =>
+    {
+      return {
+        name: field,
+        order: inputFields[field].order || 10,
+        type: inputFields[field].type || 'string',
+        self: inputFields[field].self !== undefined ? inputFields[field].self : true,
+        admin: inputFields[field].admin !== undefined ? inputFields[field].admin : true,
+        enabled: inputFields[field].enabled !== undefined ? inputFields[field].enabled : true,
+      };
+    });
+  fields.sort(function (a, b)
   {
     if (a.order !== b.order)
     {

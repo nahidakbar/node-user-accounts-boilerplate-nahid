@@ -74,7 +74,7 @@ describeConfig('config', config, function (handler)
         password: 'XXX'
       }))
       .status, 400);
-    // TODO: can't seem to figure out how to customise 
+    // TODO: can't seem to figure out how to customise
   });
 });
 
@@ -86,6 +86,9 @@ describe(EmailAuth.name, function ()
   {
     emails = [];
     instance = new EmailAuth({
+      users: {
+        lookup: {}
+      },
       crypt: new PBKDF2(),
       emailSender: {
         send: function ()
@@ -122,3 +125,9 @@ describe(EmailAuth.name, function ()
     await instance.sendTemporaryPassword('recover', 'email', 'password', 'expireMinutes', 'loginLinkPrefix');
   })
 })
+
+process.on('unhandledRejection', error =>
+{
+  // Will print "unhandledRejection err is not defined"
+  console.log('unhandledRejection', error.stack);
+});

@@ -2,7 +2,8 @@
 
 const audit = require('../helper/audit');
 const failureImpl = require('../restriction/failure');
-const generatePassword = require('../fields/strongPassword').generate;
+const generatePassword = require('../fields/strongPassword')
+  .generate;
 const json = require('body-parser')
   .json();
 const recaptchaImpl = require('../restriction/recaptcha');
@@ -22,7 +23,7 @@ class EmailAuth extends Auth
    * @param {object} options see Auth class + additional options for email configuration.
    * @property {number} [options.tokenExpxiryMinutes=10] number of minutes to restrict token exchange to for passwordless login
    */
-  constructor(options = {})
+  constructor(options)
   {
     super('email', options);
 
@@ -95,13 +96,6 @@ class EmailAuth extends Auth
      * If true, it remembers any passwords specified registration.
      */
     this.allowPasswordSettingDuringRegistration = options.allowPasswordSettingDuringRegistration || false;
-
-
-    /**
-     * login security tokens
-     * @protected
-     */
-    this.tokens = {};
   }
 
   /**
@@ -109,8 +103,6 @@ class EmailAuth extends Auth
    */
   async strategyImpl(req, username, password, done)
   {
-    const tokens = this.tokens;
-
     // call if unsuccessful
     function error(msg, detailed = undefined)
     {
@@ -127,33 +119,39 @@ class EmailAuth extends Auth
     // expire aged tokens
     const now = Date.now();
 
-    for (let tok in tokens)
-    {
-      if (now >= tokens[tok].expires)
-      {
-        delete tokens[tok];
-      }
-    }
-
-    // passwordless login
-    if (tokens[username])
-    {
-      if (tokens[username].password === password)
-      {
-        const profile = await this.createProfileFromCredential(username, tokens[username].extra);
-
-        delete tokens[username];
-
-        this.handleUserLoginByProfile(username, profile, done, req);
-      }
-      // else
-      // {
-      //   error('Temporary Login password did not match.', username);
-      // }
-    }
-    // else // username / password login
+    // // passwordless login
+    // if (tokens[username])
     // {
+    //   if (tokens[username].password === password)
+    //   {
+    //     const profile = await this.createProfileFromCredential(username, tokens[username].extra);
+    //
+    //     delete tokens[username];
+    //
+    //     this.handleUserLoginByProfile(username, profile, done, req);
+    //   }
+    // }
     const user = this.findUser(username);
+
+    if (user && user.loginToken)
+    {
+      if (Date.now() > user.loginToken.expires)
+      {
+        delete user.loginToken;
+        await this.users.updateRecord(user);
+      }
+      else if (user.loginToken.password === password)
+      {
+        const profile = await this.createProfileFromCredential(username, user.loginToken.extra);
+        const update = this.createUserFromProfile(profile);
+        delete user.loginToken;
+        delete update.id;
+        Object.assign(user, update);
+        await this.users.updateRecord(user);
+        done(null, user);
+        return
+      }
+    }
 
     if (user && user.credentials) // if found, log in found account
     {
@@ -179,7 +177,6 @@ class EmailAuth extends Auth
       }
     }
     error('Email and password combination not found.', username);
-    // }
   }
 
   /**
@@ -187,7 +184,6 @@ class EmailAuth extends Auth
    */
   async passwordlessImpl(req, res)
   {
-    const tokens = this.tokens;
     try
     {
       const username = req.body.username;
@@ -200,11 +196,24 @@ class EmailAuth extends Auth
       const theme = req.params.theme || 'login';
 
       await this.sendTemporaryPassword(theme, username, temporaryPassword, this.description.tokenExpiryMinutes, req.body.loginLinkPrefix);
-      tokens[username] = {
+      let user = this.findUser(username);
+      let update = user ? this.users.updateRecord : this.users.createRecord;
+      if (!user)
+      {
+        user = {
+          id: this.generateId(),
+          credentials: [{
+            type: 'email',
+            value: username
+          }]
+        };
+      }
+      user.loginToken = {
         password: temporaryPassword,
         expires: Date.now() + this.tokenExpiryMilliseconds,
         extra: req.body,
       };
+      await update.call(this.users, user);
       res.success('A login email has been sent to email address.', audit.LOGIN, username);
     }
     catch (e)
