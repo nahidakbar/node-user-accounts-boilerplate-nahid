@@ -7,7 +7,7 @@ const Strategy = require('passport-github2')
 
 /**
  * OAuth login using githuhb login provider
- * 
+ *
  * Requires ```passport-github2``` package.
  */
 class GithubAuth extends Auth
@@ -27,6 +27,11 @@ class GithubAuth extends Auth
      * OAuth 2 Client Secret
      */
     this.githubClientSecret = options.githubClientSecret;
+
+    /**
+     * Should it construct urls based on proxy headers.
+     */
+    this.proxy = options.proxy || false;
   }
 
   /**
@@ -39,7 +44,7 @@ class GithubAuth extends Auth
         clientSecret: this.githubClientSecret,
         callbackURL: `${prefix}/callback.json`,
         passReqToCallback: true,
-        proxy: true,
+        proxy: this.proxy,
       }, (req, accessToken, refreshToken, profile, done) =>
       this.handleUserLoginByProfile(null, profile, done, req)));
 

@@ -1,6 +1,6 @@
 {
   "name": "node-user-accounts-boilerplate",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Off the shelf user accounts management",
   "main": "setup.js",
   "directories": {
@@ -30,6 +30,10 @@
     "jbn": "latest",
     "node-collections-boilerplate": "^0.1.8",
     "node-recaptcha2": "^2.1.2",
+    "passport-facebook": "^2.1.1",
+    "passport-github2": "^0.1.11",
+    "passport-google-oauth2": "^0.1.6",
+    "passport-linkedin-oauth2": "^1.5.0",
     "passport-local": "^1.0.0",
     "scrypt": "^6.0.3",
     "sendmail": "^1.2.0"

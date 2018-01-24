@@ -30,6 +30,11 @@ class FacebookAuth extends Auth
      * OAuth 2 Client Secret
      */
     this.facebookClientSecret = options.facebookClientSecret;
+
+    /**
+     * Should it construct urls based on proxy headers.
+     */
+    this.proxy = options.proxy || false;
   }
 
   /**
@@ -44,7 +49,7 @@ class FacebookAuth extends Auth
         scope: ['email', 'public_profile'],
         state: true,
         passReqToCallback: true,
-        proxy: true,
+        proxy: this.proxy,
       }, (req, accessToken, refreshToken, profile, done) =>
       this.handleUserLoginByProfile(null, profile, done, req)));
 

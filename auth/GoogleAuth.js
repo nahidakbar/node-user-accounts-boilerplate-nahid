@@ -7,7 +7,7 @@ const Strategy = require('passport-google-oauth2')
 
 /**
  * OAuth login using google login provider
- * 
+ *
  * Requires ```passport-google-oauth2``` package.
  */
 class GoogleAuth extends Auth
@@ -30,6 +30,11 @@ class GoogleAuth extends Auth
      * OAuth 2 Client Secret
      */
     this.googleClientSecret = options.googleClientSecret;
+
+    /**
+     * Should it construct urls based on proxy headers.
+     */
+    this.proxy = options.proxy || false;
   }
 
   /**
@@ -44,7 +49,7 @@ class GoogleAuth extends Auth
         scope: ['email', 'profile'],
         state: true,
         passReqToCallback: true,
-        proxy: true,
+        proxy: this.proxy,
       }, (req, accessToken, refreshToken, profile, done) =>
       this.handleUserLoginByProfile(null, profile, done, req)));
 

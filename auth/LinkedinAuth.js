@@ -6,7 +6,7 @@ const Strategy = require('passport-linkedin-oauth2')
 
 /**
  * OAuth login using linkedin login provider
- * 
+ *
  * Requires ```passport-linkedin-oauth2``` package.
  */
 class LinkedinAuth extends Auth
@@ -29,6 +29,11 @@ class LinkedinAuth extends Auth
      * OAuth 2 Client Secret
      */
     this.linkedinClientSecret = options.linkedinClientSecret;
+
+    /**
+     * Should it construct urls based on proxy headers.
+     */
+    this.proxy = options.proxy || false;
   }
 
   /**
@@ -43,7 +48,7 @@ class LinkedinAuth extends Auth
         scope: ['r_emailaddress', 'r_basicprofile'],
         state: true,
         passReqToCallback: true,
-        proxy: true,
+        proxy: this.proxy,
       }, (req, accessToken, refreshToken, profile, done) =>
       this.handleUserLoginByProfile(null, profile, done, req)));
 

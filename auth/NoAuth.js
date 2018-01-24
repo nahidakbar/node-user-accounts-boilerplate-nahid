@@ -5,7 +5,7 @@ const audit = require('../helper/audit');
 
 /**
  * Allows login without any form of credential exchange.
- * 
+ *
  * Meant for testing / developer debugging etc.
  */
 class NoAuth extends Auth
@@ -28,7 +28,7 @@ class NoAuth extends Auth
 
   /**
    * Make any request to /<method>/login.json to gain access.
-   * 
+   *
    * @override
    */
   install(app, prefix)
@@ -39,14 +39,7 @@ class NoAuth extends Auth
         id: this.loginUserId
       }, function (err)
       {
-        if (err)
-        {
-          res.error(`Login failed: ${err}`, audit.LOGIN_FAILURE);
-        }
-        else
-        {
-          res.success('Logged in', audit.LOGIN);
-        }
+        res.success('Logged in', audit.LOGIN);
       });
     });
   }

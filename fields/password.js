@@ -16,11 +16,6 @@ module.exports.assign = async function (user, field, value, fieldMeta, loginUser
     throw new Error(`${field} value is not ${this.type}`);
   }
 
-  if (value.length === 0)
-  {
-    throw new Error(`${field} value is empty`);
-  }
-
   if (!config.crypt)
   {
     throw new Error('A crypt is not configured');
