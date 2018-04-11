@@ -1,3 +1,4 @@
+const escape = require('../helper/escape');
 module.exports.order = 0;
 module.exports.type = 'string';
 module.exports.assign = async function (user, field, value, fieldMeta, loginUser)
@@ -6,5 +7,5 @@ module.exports.assign = async function (user, field, value, fieldMeta, loginUser
   {
     throw new Error(`${field} value is not ${this.type}`);
   }
-  user[field] = value;
+  user[field] = escape(value);
 };

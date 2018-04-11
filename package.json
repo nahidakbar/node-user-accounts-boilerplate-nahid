@@ -1,6 +1,6 @@
 {
   "name": "node-user-accounts-boilerplate",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Off the shelf user accounts management",
   "main": "setup.js",
   "directories": {
@@ -19,9 +19,11 @@
   "dependencies": {
     "body-parser": "^1.17.2",
     "cookie-parser": "^1.4.3",
+    "escape-html": "^1.0.3",
     "express-session": "^1.15.3",
     "passport": "^0.3.2",
-    "request-ip": "^2.0.2"
+    "request-ip": "^2.0.2",
+    "unescape-html": "^1.1.0"
   },
   "devDependencies": {
     "aws-sdk": "^2.112.0",

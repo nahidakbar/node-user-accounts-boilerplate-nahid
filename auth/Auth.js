@@ -2,6 +2,7 @@
 
 const audit = require('../helper/audit');
 const generateId = require('../helper/generateId');
+const escape = require('../helper/escape');
 
 /**
  * Authenticator/passport strategy wrapper abstraction.
@@ -187,7 +188,7 @@ class Auth
       // new user roles
       roles: this.defaultRoles,
       // profile bs
-      displayName: profile.displayName,
+      displayName: escape(profile.displayName),
       //~ name: profile.name,
       photos: profile.photos,
       //~ // notification settings
