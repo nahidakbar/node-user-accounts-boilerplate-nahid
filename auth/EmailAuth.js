@@ -103,6 +103,8 @@ class EmailAuth extends Auth
    */
   async strategyImpl(req, username, password, done)
   {
+    const defaultErrorMsg = this.defaultErrorMsg;
+
     // call if unsuccessful
     function error(msg, detailed = undefined)
     {
@@ -110,14 +112,14 @@ class EmailAuth extends Auth
       if (typeof msg === 'string')
       {
         msg = {
-          error: msg
+          error: defaultErrorMsg || msg
         };
       }
       done(null, msg);
     }
 
     // expire aged tokens
-    const now = Date.now();
+    // const now = Date.now();
 
     // // passwordless login
     // if (tokens[username])
@@ -184,13 +186,22 @@ class EmailAuth extends Auth
    */
   async passwordlessImpl(req, res)
   {
+    const defaultErrorMsg = this.defaultErrorMsg;
+
+    // call if unsuccessful
+    function error(msg, auditStr, detailed = undefined)
+    {
+      req.audit(auditStr, msg, detailed);
+      return res.error(defaultErrorMsg || msg, audit.LOGIN_FAILURE);
+    }
+
     try
     {
       const username = req.body.username;
 
       if (!req.body.username || typeof req.body.username !== 'string')
       {
-        return res.error('Username not specified', audit.LOGIN_FAILURE);
+        return error('Username not specified', audit.LOGIN_FAILURE, req.body);
       }
       const temporaryPassword = generatePassword();
       const theme = req.params.theme || 'login';
@@ -218,8 +229,7 @@ class EmailAuth extends Auth
     }
     catch (e)
     {
-      console.log(e);
-      res.error('Error sending email. Please verify that your address is correct and is valid.', audit.LOGIN_FAILURE.e);
+      error('Error sending email. Please verify that your address is correct and is valid.', audit.LOGIN_FAILURE, e);
     }
   }
 

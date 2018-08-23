@@ -87,6 +87,14 @@ class Auth
     //~ {
     //~ this.description.recaptcha = true;
     //~ }
+
+    /**
+     * Default error message to return instead of actual errors (security).
+     *
+     * @type {string}
+     */
+    this.defaultErrorMsg = options.defaultErrorMsg || undefined;
+
   }
 
   /**
